@@ -1,15 +1,18 @@
 import express, { type Request, type Response } from 'express';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import fs from 'node:fs';
 import path from 'node:path';
 import estudiantesRouter from './routesestudiantes.js';
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ?? 3000;
 
+// Middleware global para CORS y JSON
+app.use(cors());
 app.use(express.json());
 
-// Verificación y carga segura de la documentación
+// Carga de Swagger UI
 const swaggerPath = path.resolve(process.cwd(), 'swagger_output.json');
 
 if (fs.existsSync(swaggerPath)) {
@@ -26,6 +29,7 @@ app.get('/api/status', (_req: Request, res: Response) => {
   });
 });
 
+// Ruta base correcta para los estudiantes
 app.use('/api/estudiantes', estudiantesRouter);
 
 app.listen(PORT, () => {
