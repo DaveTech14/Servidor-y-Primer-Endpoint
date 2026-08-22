@@ -2,7 +2,6 @@ import { Router, type Request, type Response } from 'express';
 
 const router = Router();
 
-// Interface Estudiante y almacenamiento en memoria
 interface Estudiante {
   id: number;
   nombre: string;
@@ -13,9 +12,18 @@ interface Estudiante {
 const estudiantes: Estudiante[] = [];
 let contadorId = 1;
 
-// GET lista completa o filtrada
-
+// GET - Obtener todos los estudiantes
 router.get('/', (req: Request, res: Response) => {
+  /* 
+    #swagger.tags = ['Estudiantes']
+    #swagger.summary = 'Obtener lista de estudiantes'
+    #swagger.description = 'Retorna todos los estudiantes registrados o filtrados por bootcamp.'
+    #swagger.parameters['bootcamp'] = {
+      in: 'query',
+      description: 'Filtrar estudiantes por nombre de bootcamp',
+      type: 'string'
+    }
+  */
   const { bootcamp } = req.query;
 
   if (bootcamp) {
@@ -28,8 +36,18 @@ router.get('/', (req: Request, res: Response) => {
   return res.json(estudiantes);
 });
 
-// GET id  Obtener un estudiante específico por identificador
+// GET /:id - Obtener un estudiante por ID
 router.get('/:id', (req: Request, res: Response) => {
+  /* 
+    #swagger.tags = ['Estudiantes']
+    #swagger.summary = 'Obtener estudiante por ID'
+    #swagger.parameters['id'] = {
+      in: 'path',
+      description: 'ID único del estudiante',
+      required: true,
+      type: 'integer'
+    }
+  */
   const idParam = Number(req.params.id);
   const estudiante = estudiantes.find((e) => e.id === idParam);
 
@@ -40,9 +58,28 @@ router.get('/:id', (req: Request, res: Response) => {
   return res.json(estudiante);
 });
 
-// POST Crea un estudiante con id autogenerado
-
+// POST - Crear estudiante
 router.post('/', (req: Request, res: Response) => {
+  /* 
+    #swagger.tags = ['Estudiantes']
+    #swagger.summary = 'Registrar un nuevo estudiante'
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              nombre: { type: "string", example: "David Salinas" },
+              email: { type: "string", example: "davosal@gmail.com" },
+              bootcamp: { type: "string", example: "fullstackPERN" }
+            },
+            required: ["email"]
+          }
+        }
+      }
+    }
+  */
   const { nombre, email, bootcamp } = req.body;
 
   if (!email) {
@@ -60,9 +97,18 @@ router.post('/', (req: Request, res: Response) => {
   return res.status(201).json(nuevoEstudiante);
 });
 
-// PUT Actualiza un estudiante existente por id
-
+// PUT /:id - Actualizar estudiante
 router.put('/:id', (req: Request, res: Response) => {
+  /* 
+    #swagger.tags = ['Estudiantes']
+    #swagger.summary = 'Actualizar datos de un estudiante'
+    #swagger.parameters['id'] = {
+      in: 'path',
+      description: 'ID del estudiante a actualizar',
+      required: true,
+      type: 'integer'
+    }
+  */
   const idParam = Number(req.params.id);
   const estudiante = estudiantes.find((e) => e.id === idParam);
 
@@ -79,9 +125,18 @@ router.put('/:id', (req: Request, res: Response) => {
   return res.json(estudiante);
 });
 
-// DELETE Elimina un estudiante del arreglo por id
-
+// DELETE /:id - Eliminar estudiante
 router.delete('/:id', (req: Request, res: Response) => {
+  /* 
+    #swagger.tags = ['Estudiantes']
+    #swagger.summary = 'Eliminar un estudiante por ID'
+    #swagger.parameters['id'] = {
+      in: 'path',
+      description: 'ID del estudiante a eliminar',
+      required: true,
+      type: 'integer'
+    }
+  */
   const idParam = Number(req.params.id);
   const index = estudiantes.findIndex((e) => e.id === idParam);
 
@@ -97,5 +152,3 @@ router.delete('/:id', (req: Request, res: Response) => {
 });
 
 export default router;
-
-

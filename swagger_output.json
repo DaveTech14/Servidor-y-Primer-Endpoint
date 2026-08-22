@@ -7,27 +7,23 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/"
+      "url": "http://localhost:3000/api/estudiantes",
+      "description": "Servidor Local - Estudiantes"
     }
   ],
   "paths": {
-    "/api/status": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/": {
       "get": {
-        "description": "",
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Obtener lista de estudiantes",
+        "description": "Retorna todos los estudiantes registrados o filtrados por bootcamp.",
         "parameters": [
           {
             "name": "bootcamp",
             "in": "query",
+            "description": "Filtrar estudiantes por nombre de bootcamp",
             "schema": {
               "type": "string"
             }
@@ -40,6 +36,10 @@
         }
       },
       "post": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Registrar un nuevo estudiante",
         "description": "",
         "responses": {
           "201": {
@@ -50,21 +50,28 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "nombre": {
-                    "example": "any"
+                    "type": "string",
+                    "example": "David Salinas"
                   },
                   "email": {
-                    "example": "any"
+                    "type": "string",
+                    "example": "davosal@gmail.com"
                   },
                   "bootcamp": {
-                    "example": "any"
+                    "type": "string",
+                    "example": "fullstackPERN"
                   }
-                }
+                },
+                "required": [
+                  "email"
+                ]
               }
             }
           }
@@ -73,6 +80,10 @@
     },
     "/{id}": {
       "get": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Obtener estudiante por ID",
         "description": "",
         "parameters": [
           {
@@ -81,7 +92,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "ID único del estudiante"
           }
         ],
         "responses": {
@@ -94,6 +106,10 @@
         }
       },
       "put": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Actualizar datos de un estudiante",
         "description": "",
         "parameters": [
           {
@@ -102,7 +118,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "ID del estudiante a actualizar"
           }
         ],
         "responses": {
@@ -135,6 +152,10 @@
         }
       },
       "delete": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Eliminar un estudiante por ID",
         "description": "",
         "parameters": [
           {
@@ -143,7 +164,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "ID del estudiante a eliminar"
           }
         ],
         "responses": {

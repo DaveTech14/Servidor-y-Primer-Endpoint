@@ -5,22 +5,19 @@ const doc = {
   info: {
     title: 'API de Inscripciones Académicas',
     description: 'Documentación de la API REST',
+    version: '1.0.0',
   },
-  host: 'localhost:3000',
-  schemes: ['http'],
+  servers: [
+    {
+      url: 'http://localhost:3000/api/estudiantes',
+      description: 'Servidor Local - Estudiantes',
+    },
+  ],
 };
 
-// Forzar la ruta absoluta a la raíz del proyecto
 const outputFile = path.resolve(process.cwd(), 'swagger_output.json');
-const routes = [
-  path.resolve(process.cwd(), 'src/index.ts'),
+const endpointsFiles = [
   path.resolve(process.cwd(), 'src/routesestudiantes.ts')
 ];
 
-console.log('🔄 Generando documentación de Swagger...');
-
-swaggerAutogen({ openapi: '3.0.0' })(outputFile, routes, doc).then(() => {
-  console.log('✅ Archivo swagger_output.json creado exitosamente en:', outputFile);
-}).catch((err) => {
-  console.error('❌ Error al generar Swagger:', err);
-});
+swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointsFiles, doc);
